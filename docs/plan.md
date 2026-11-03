@@ -21,6 +21,9 @@ Derived from `docs/spec.md`. The spec says what to build; this file says how.
 - `next lint` is gone, and `npm run lint` already calls ESLint directly.
 - `cacheComponents` is on in `next.config.ts`, so reading cookies outside a Suspense boundary is a build error. Every protected route has a `loading.tsx`, which provides that boundary.
 - User data never uses `use cache`, so every read is fresh and nothing private is cached.
+- With `cacheComponents` on, Next.js keeps up to 3 visited routes alive but hidden, including their state and form values. Logout therefore does a full page load, so no user data stays in the page. Forms and dialogs need checking for stale state when a user returns to them.
+- React resets a form after its action runs, which puts a `<select>` back on its first option. Forms with a select submit through `onSubmit` and `startTransition` to skip that reset.
+- Forms are tested in a real browser with JavaScript on. Plain HTTP requests can't see what the user sees.
 - Read the matching guide in `node_modules/next/dist/docs/` before each task, as `AGENTS.md` requires.
 
 ### Files beyond the `CLAUDE.md` structure
