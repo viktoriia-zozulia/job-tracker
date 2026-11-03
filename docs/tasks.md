@@ -126,7 +126,7 @@ Built last so they're the first to go if time runs out. If one is cut, move it t
 - [ ] **29. Run the full verification on production** (all stories)
   - Run every check in plan section 11 on the deployed app, and tick the acceptance criteria in the spec.
   - Verify: every criterion is ticked, or was cut under "If one day isn't enough".
-- [ ] **30. Set the Anthropic spend limit** (US-5, you)
+- [x] **30. Set the Anthropic spend limit** (US-5, you)
   - Set a monthly limit in the Anthropic Console.
   - Verify: the limit shows in the Console.
 - [ ] **31. Add the public link to the README** (definition of done)
