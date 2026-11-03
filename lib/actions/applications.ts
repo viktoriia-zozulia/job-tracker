@@ -9,9 +9,11 @@ import {
   createApplication as insertApplication,
   getApplication,
   updateApplication as saveApplication,
+  updateApplicationStatus,
 } from "@/lib/db/queries";
 import { appliedDateAfterStatusChange, resolveToday } from "@/lib/dates";
 import {
+  APPLICATION_STATUSES,
   applicationSchema,
   isApplicationId,
   type ApplicationField,
@@ -155,4 +157,35 @@ export async function updateApplication(
   revalidatePath("/dashboard");
   revalidatePath(`/applications/${id}/edit`);
   redirect("/dashboard");
+}
+
+export async function changeApplicationStatus(
+  id: string,
+  status: string,
+  today: string,
+): Promise<{ error?: string }> {
+  const user = await requireUser();
+  const parsedStatus = z.enum(APPLICATION_STATUSES).safeParse(status);
+
+  if (!isApplicationId(id) || !parsedStatus.success) {
+    return { error: NOT_FOUND_MESSAGE };
+  }
+
+  try {
+    const updated = await updateApplicationStatus(
+      user.id,
+      id,
+      parsedStatus.data,
+      resolveToday(today),
+    );
+    if (!updated) {
+      return { error: NOT_FOUND_MESSAGE };
+    }
+  } catch {
+    return { error: "Couldn't change the status. Please try again." };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/applications/${id}/edit`);
+  return {};
 }

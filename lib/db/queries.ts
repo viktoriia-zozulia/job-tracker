@@ -4,6 +4,7 @@ import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { applications } from "@/lib/db/schema";
+import { appliedDateAfterStatusChange } from "@/lib/dates";
 import type { ApplicationInput, ApplicationStatus } from "@/lib/validation";
 
 export type Application = typeof applications.$inferSelect;
@@ -55,6 +56,33 @@ export async function updateApplication(
   const updated = await db
     .update(applications)
     .set({ ...input, updatedAt: new Date() })
+    .where(and(eq(applications.id, id), eq(applications.userId, userId)))
+    .returning({ id: applications.id });
+  return updated.length > 0;
+}
+
+/** Changes only the status, applying the applied date rule. Returns false if no application with this id belongs to this user. */
+export async function updateApplicationStatus(
+  userId: string,
+  id: string,
+  status: ApplicationStatus,
+  today: string,
+) {
+  const existing = await getApplication(userId, id);
+  if (!existing) {
+    return false;
+  }
+
+  const updated = await db
+    .update(applications)
+    .set({
+      status,
+      appliedAt: appliedDateAfterStatusChange(
+        { from: existing.status, to: status, appliedAt: existing.appliedAt },
+        today,
+      ),
+      updatedAt: new Date(),
+    })
     .where(and(eq(applications.id, id), eq(applications.userId, userId)))
     .returning({ id: applications.id });
   return updated.length > 0;

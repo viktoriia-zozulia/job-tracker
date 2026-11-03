@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { StatusSelect } from "@/components/status-select";
 import type { Application } from "@/lib/db/queries";
 import { normalizeUrl } from "@/lib/validation";
 
@@ -32,7 +33,7 @@ export function ApplicationsTable({
   applications: Application[];
 }) {
   return (
-    <div className="mt-6 overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
+    <div className="relative mt-6 overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
       <table className="w-full min-w-[48rem] text-sm">
         <thead className="border-b border-zinc-200 text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
           <tr>
@@ -68,8 +69,12 @@ export function ApplicationsTable({
               <td className={cellClass}>
                 <RoleCell application={application} />
               </td>
-              <td className={`${cellClass} capitalize`}>
-                {application.status}
+              <td className={cellClass}>
+                <StatusSelect
+                  id={application.id}
+                  company={application.company}
+                  status={application.status}
+                />
               </td>
               <td className={`${cellClass} whitespace-nowrap`}>
                 {application.appliedAt}

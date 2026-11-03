@@ -76,7 +76,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **17. Add the edit page and update action** (US-4, US-2, US-1)
   - Reuse `ApplicationForm` at `/applications/[id]/edit`, with update filtered on `id` and `user_id`. Apply the date rule when status changes.
   - Verify: all fields save; moving from "saved" to "applied", "interview" or "offer" with an empty date sets today; moving from "saved" to "rejected" keeps it empty; a malformed id, a missing id and another user's id all give the same 404.
-- [ ] **18. Add the quick status change** (US-4, US-2)
+- [x] **18. Add the quick status change** (US-4, US-2)
   - Add a table control using `useOptimistic` and `useTransition`, with the same date rule and refresh on success.
   - Verify: no full page reload; blocking the request in dev tools rolls back with an error; another user's id changes nothing.
 - [ ] **19. Add delete with confirmation** (US-4, US-1)
