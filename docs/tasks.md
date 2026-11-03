@@ -88,7 +88,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **20. Add the usage limit query** (US-5)
   - Add one atomic upsert that increments only while `count` is below 50.
   - Verify: set the count to 49, send parallel calls, and confirm only one succeeds and the count stops at 50.
-- [ ] **21. Add the Claude extraction module** (US-5)
+- [x] **21. Add the Claude extraction module** (US-5)
   - Add `lib/ai/parse-job.ts` using `claude-haiku-5-5` from one constant, `client.messages.parse`, effort `low`, no retries and a timeout. Treat refusal and `max_tokens` stops as failures.
   - Verify: a throwaway script extracts from a real posting, and a posting with no link or salary returns them as null.
 - [x] **22. Add the "appears in the text" check** (US-5)
