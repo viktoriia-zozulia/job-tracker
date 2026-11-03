@@ -97,7 +97,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **23. Add `POST /api/parse-job`** (US-5, US-1)
   - Run the checks in the order in plan section 8, and reject a mismatched `Origin`. Log only error type and status, never the text.
   - Verify: no session returns 401; empty or over-20,000-character text returns 400 and isn't counted; at the limit it returns 429 and doesn't call Claude; a failed call still counts; server logs contain no job description text.
-- [ ] **24. Add the paste box to the add page** (US-5)
+- [x] **24. Add the paste box to the add page** (US-5)
   - Merge results into empty fields only, leave status and date alone, and list fields not found. Nothing saves until the form is submitted.
   - Verify: typed values aren't overwritten; with an invalid API key and at the limit, a clear message appears and the form still works; `ANTHROPIC_API_KEY` isn't in the client bundle.
 

@@ -15,6 +15,11 @@ import {
   type ApplicationFormState,
   type ApplicationFormValues,
 } from "@/lib/actions/applications";
+import {
+  EXTRACTED_FIELDS,
+  type ExtractedField,
+} from "@/lib/ai/verify-extraction";
+import { JobDescriptionPaste } from "@/components/job-description-paste";
 import { localDateString } from "@/lib/dates";
 import {
   APPLICATION_STATUSES,
@@ -84,6 +89,20 @@ function ApplicationFields({
 
   const stackTags = parseStack(values.stack);
 
+  // Only fills empty fields, so it never overwrites what the user typed.
+  function fillEmptyFields(fields: Partial<Record<ExtractedField, string>>) {
+    setValues((current) => {
+      const next = { ...current };
+      for (const field of EXTRACTED_FIELDS) {
+        const value = fields[field];
+        if (value && !current[field].trim()) {
+          next[field] = value;
+        }
+      }
+      return next;
+    });
+  }
+
   function setField(field: ApplicationField, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
   }
@@ -130,6 +149,8 @@ function ApplicationFields({
 
   return (
     <>
+      {!isEdit && <JobDescriptionPaste onFill={fillEmptyFields} />}
+
       <div className="grid gap-4 sm:grid-cols-2">
         {textField("company", "Company", { maxLength: 200, required: true })}
         {textField("role", "Role", { maxLength: 200, required: true })}
