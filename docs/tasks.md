@@ -55,7 +55,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **12. Add the create query and Server Action** (US-2, US-1)
   - Add `lib/db/queries.ts`. The action gets the user id from `requireUser()` and ignores any id sent by the client. New "saved" applications store a null date.
   - Verify: submitting invalid data directly returns errors and saves nothing, and a `user_id` field in the request is ignored.
-- [ ] **13. Add the add page and form** (US-2)
+- [x] **13. Add the add page and form** (US-2)
   - Add `/applications/new` and `ApplicationForm`, with today's browser date and status "applied" as defaults. Selecting "saved" clears the date, and a validation error keeps what was typed.
   - Verify: the defaults are correct; invalid input shows clear errors; "Save and add another" gives an empty form; a plain save returns to `/dashboard`.
 
