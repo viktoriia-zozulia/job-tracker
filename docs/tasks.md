@@ -31,7 +31,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **6. Add the `ai_usage` table** (US-5)
   - Add the schema and primary key, then generate and apply a new migration.
   - Verify: the table shows up in Supabase with the expected key.
-- [ ] **7. Add RLS in a custom migration** (US-1, US-5)
+- [x] **7. Add RLS in a custom migration** (US-1, US-5)
   - Add owner-only policies on `applications`. Enable RLS on `ai_usage` with no policies.
   - Verify: using the browser key and a logged-in session, a direct API call reads only your own `applications` rows and can't read or change `ai_usage`.
 
