@@ -1,9 +1,9 @@
 import "server-only";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { applications } from "@/lib/db/schema";
+import { aiUsage, applications } from "@/lib/db/schema";
 import { appliedDateAfterStatusChange } from "@/lib/dates";
 import type { ApplicationInput, ApplicationStatus } from "@/lib/validation";
 
@@ -95,4 +95,22 @@ export async function deleteApplication(userId: string, id: string) {
     .where(and(eq(applications.id, id), eq(applications.userId, userId)))
     .returning({ id: applications.id });
   return deleted.length > 0;
+}
+
+/**
+ * Claims one AI parse for this user today (UTC). Returns false at the limit.
+ * One atomic statement, so parallel requests can't go over the limit.
+ */
+export async function claimAiUse(userId: string, dailyLimit: number) {
+  const day = new Date().toISOString().slice(0, 10);
+  const claimed = await db
+    .insert(aiUsage)
+    .values({ userId, day, count: 1 })
+    .onConflictDoUpdate({
+      target: [aiUsage.userId, aiUsage.day],
+      set: { count: sql`${aiUsage.count} + 1` },
+      where: sql`${aiUsage.count} < ${dailyLimit}`,
+    })
+    .returning({ count: aiUsage.count });
+  return claimed.length > 0;
 }

@@ -85,7 +85,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 
 ## US-5: Fill from job description (branch: `us-5-ai-fill`)
 
-- [ ] **20. Add the usage limit query** (US-5)
+- [x] **20. Add the usage limit query** (US-5)
   - Add one atomic upsert that increments only while `count` is below 50.
   - Verify: set the count to 49, send parallel calls, and confirm only one succeeds and the count stops at 50.
 - [ ] **21. Add the Claude extraction module** (US-5)
