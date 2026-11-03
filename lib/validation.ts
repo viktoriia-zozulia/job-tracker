@@ -17,6 +17,14 @@ export const APPLICATION_STATUSES = [
 
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 
+/** Reads a status from a URL parameter. Anything unrecognised means no filter. */
+export function parseStatusFilter(
+  value: string | string[] | undefined,
+): ApplicationStatus | undefined {
+  const parsed = z.enum(APPLICATION_STATUSES).safeParse(value);
+  return parsed.success ? parsed.data : undefined;
+}
+
 /**
  * Returns a normalised http or https URL, or null if the value isn't one.
  * A value with no scheme gets https://. Other schemes, such as javascript:, are

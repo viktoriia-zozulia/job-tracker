@@ -1,18 +1,26 @@
 import "server-only";
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { applications } from "@/lib/db/schema";
-import type { ApplicationInput } from "@/lib/validation";
+import type { ApplicationInput, ApplicationStatus } from "@/lib/validation";
 
 export type Application = typeof applications.$inferSelect;
 
-export async function listApplications(userId: string): Promise<Application[]> {
+export async function listApplications(
+  userId: string,
+  filters: { status?: ApplicationStatus } = {},
+): Promise<Application[]> {
   return db
     .select()
     .from(applications)
-    .where(eq(applications.userId, userId))
+    .where(
+      and(
+        eq(applications.userId, userId),
+        filters.status ? eq(applications.status, filters.status) : undefined,
+      ),
+    )
     .orderBy(desc(applications.createdAt), desc(applications.id));
 }
 
