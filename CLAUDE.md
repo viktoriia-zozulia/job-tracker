@@ -26,7 +26,8 @@ Single developer project. Goal: ship a clean, working MVP fast, without cutting 
 
 ## Data model
 
-- `applications`: id (uuid), user_id (uuid, references auth.users), company, role, url, stack (text[]), salary (text), status (enum: saved, applied, interview, offer, rejected), applied_at (date), notes, created_at, updated_at
+- `applications`: id (uuid), user_id (uuid, references auth.users, on delete cascade), company, role, url, stack (text[]), salary (text), status (enum: saved, applied, interview, offer, rejected), applied_at (date, nullable), notes, created_at, updated_at
+- `ai_usage`: user_id (uuid, references auth.users, on delete cascade), day (date, UTC), count (integer, default 0), primary key (user_id, day). Holds counts only, never job description text.
 
 ## Rules (always follow)
 
