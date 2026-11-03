@@ -28,7 +28,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **5. Add the `applications` table** (US-2, US-3)
   - Add the schema, status enum, index and defaults, then generate and apply the migration.
   - Verify: the table, enum, index and cascade show up in Supabase.
-- [ ] **6. Add the `ai_usage` table** (US-5)
+- [x] **6. Add the `ai_usage` table** (US-5)
   - Add the schema and primary key, then generate and apply a new migration.
   - Verify: the table shows up in Supabase with the expected key.
 - [ ] **7. Add RLS in a custom migration** (US-1, US-5)

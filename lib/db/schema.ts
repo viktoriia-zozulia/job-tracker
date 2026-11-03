@@ -2,8 +2,10 @@ import { sql } from "drizzle-orm";
 import {
   date,
   index,
+  integer,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uuid,
@@ -46,4 +48,16 @@ export const applications = pgTable(
       table.createdAt.desc(),
     ),
   ],
+);
+
+export const aiUsage = pgTable(
+  "ai_usage",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => authUsers.id, { onDelete: "cascade" }),
+    day: date("day").notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.day] })],
 );
