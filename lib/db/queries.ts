@@ -24,6 +24,10 @@ export async function listApplications(
     .orderBy(desc(applications.createdAt), desc(applications.id));
 }
 
+export async function countApplications(userId: string) {
+  return db.$count(applications, eq(applications.userId, userId));
+}
+
 export async function createApplication(
   userId: string,
   input: ApplicationInput,

@@ -67,7 +67,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **15. Add the status filter** (US-3)
   - Single-select, stored in `?status=`. An unknown value means no filter.
   - Verify: the filter survives a refresh, and `?status=nonsense` shows all rows.
-- [ ] **16. Add the empty states** (US-3)
+- [x] **16. Add the empty states** (US-3)
   - Separate messages for "no applications yet" and "nothing matches".
   - Verify: check a new account and a filter with no matches.
 

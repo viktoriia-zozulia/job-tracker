@@ -1,10 +1,11 @@
 import Link from "next/link";
 
 import { ApplicationsTable } from "@/components/applications-table";
+import { NoApplications, NoMatches } from "@/components/empty-state";
 import { LogoutButton } from "@/components/logout-button";
 import { StatusFilter } from "@/components/status-filter";
 import { requireUser } from "@/lib/auth";
-import { listApplications } from "@/lib/db/queries";
+import { countApplications, listApplications } from "@/lib/db/queries";
 import { parseStatusFilter } from "@/lib/validation";
 
 export default async function DashboardPage({
@@ -15,6 +16,9 @@ export default async function DashboardPage({
   const user = await requireUser();
   const status = parseStatusFilter((await searchParams).status);
   const applications = await listApplications(user.id, { status });
+  // Only needed to tell "nothing yet" from "nothing matches this filter".
+  const hasAny =
+    applications.length > 0 || (await countApplications(user.id)) > 0;
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8">
@@ -33,8 +37,18 @@ export default async function DashboardPage({
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
         Logged in as {user.email}
       </p>
-      <StatusFilter active={status} />
-      <ApplicationsTable applications={applications} />
+      {hasAny ? (
+        <>
+          <StatusFilter active={status} />
+          {applications.length > 0 ? (
+            <ApplicationsTable applications={applications} />
+          ) : (
+            <NoMatches />
+          )}
+        </>
+      ) : (
+        <NoApplications />
+      )}
     </main>
   );
 }
