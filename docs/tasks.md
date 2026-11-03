@@ -49,7 +49,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 
 ## US-2: Add an application (branch: `us-2-add-application`)
 
-- [ ] **11. Add the application validation schema** (US-2)
+- [x] **11. Add the application validation schema** (US-2)
   - Add the field rules from plan section 5 to `lib/validation.ts`, and the date rules to `lib/dates.ts`.
   - Verify: run a throwaway script with empty and whitespace company, each length limit, `linkedin.com/jobs/1`, `javascript:alert(1)`, messy stack input and a future date.
 - [ ] **12. Add the create query and Server Action** (US-2, US-1)
