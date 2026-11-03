@@ -3,9 +3,12 @@ import "server-only";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-// Supabase's transaction pooler doesn't support prepared statements.
 const client = postgres(process.env.DATABASE_URL!, {
+  // Supabase's transaction pooler doesn't support prepared statements.
   prepare: false,
+  // Through this pooler, parallel queries hang when the driver pipelines them
+  // on one connection. This makes extra queries wait for a free connection.
+  max_pipeline: 1,
   idle_timeout: 20,
 });
 
