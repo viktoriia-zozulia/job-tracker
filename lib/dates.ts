@@ -29,3 +29,40 @@ export function latestPossibleToday(now = new Date()) {
   const fourteenHours = 14 * 60 * 60 * 1000;
   return new Date(now.getTime() + fourteenHours).toISOString().slice(0, 10);
 }
+
+/** The earliest date that could be "today" for anyone, using the furthest-behind timezone (UTC-12). */
+function earliestPossibleToday(now = new Date()) {
+  const twelveHours = 12 * 60 * 60 * 1000;
+  return new Date(now.getTime() - twelveHours).toISOString().slice(0, 10);
+}
+
+/** Uses the date sent by the browser if it could be today somewhere. Otherwise falls back to today in UTC. */
+export function resolveToday(value: unknown, now = new Date()) {
+  if (
+    typeof value === "string" &&
+    isValidDateString(value) &&
+    value >= earliestPossibleToday(now) &&
+    value <= latestPossibleToday(now)
+  ) {
+    return value;
+  }
+  return now.toISOString().slice(0, 10);
+}
+
+/**
+ * The applied date after a status change. An empty date becomes today when moving
+ * to "applied", or from "saved" to "interview" or "offer". Moving from "saved" to
+ * "rejected" keeps it empty, because that application was never sent.
+ */
+export function appliedDateAfterStatusChange(
+  change: { from: string; to: string; appliedAt: string | null },
+  today: string,
+) {
+  const { from, to, appliedAt } = change;
+  if (appliedAt || from === to) {
+    return appliedAt;
+  }
+  const wasSent =
+    to === "applied" || (from === "saved" && (to === "interview" || to === "offer"));
+  return wasSent ? today : appliedAt;
+}

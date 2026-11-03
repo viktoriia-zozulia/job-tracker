@@ -77,6 +77,7 @@ RLS needs its own migration, generated with `drizzle-kit generate --custom`.
 - **`requireUser()`:** called at the start of every protected page, Server Action and route handler, because Server Actions can be reached by direct POST. The user id comes only from here, never from client input. Check the current `@supabase/ssr` docs for the right verified-session call before implementing.
 - **Ownership:** update and delete filter on `id` and `user_id` together, and zero affected rows returns not found.
 - **Same 404 everywhere:** ids are checked as UUIDs with Zod first. A malformed id, a missing id and another user's id then all give the same 404, rather than a database error.
+- **Real 404 status:** a page that has started streaming is stuck on status 200, so `proxy.ts` looks up the edit page's id first, using the user's session so RLS applies. The page still checks ownership with Drizzle. Edit links don't prefetch, so the dashboard doesn't run one lookup per row.
 - **Sign-up:** "Confirm email" is turned off in the Supabase project settings. Sign-up and login errors are shown in the form.
 - **Logout:** a Server Action.
 

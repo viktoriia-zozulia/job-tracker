@@ -34,3 +34,28 @@ export async function createApplication(
 ) {
   await db.insert(applications).values({ ...input, userId });
 }
+
+export async function getApplication(
+  userId: string,
+  id: string,
+): Promise<Application | null> {
+  const [application] = await db
+    .select()
+    .from(applications)
+    .where(and(eq(applications.id, id), eq(applications.userId, userId)));
+  return application ?? null;
+}
+
+/** Returns false if no application with this id belongs to this user. */
+export async function updateApplication(
+  userId: string,
+  id: string,
+  input: ApplicationInput,
+) {
+  const updated = await db
+    .update(applications)
+    .set({ ...input, updatedAt: new Date() })
+    .where(and(eq(applications.id, id), eq(applications.userId, userId)))
+    .returning({ id: applications.id });
+  return updated.length > 0;
+}

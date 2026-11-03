@@ -17,6 +17,10 @@ export const APPLICATION_STATUSES = [
 
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 
+export function isApplicationId(value: unknown): value is string {
+  return z.uuid().safeParse(value).success;
+}
+
 /** Reads a status from a URL parameter. Anything unrecognised means no filter. */
 export function parseStatusFilter(
   value: string | string[] | undefined,

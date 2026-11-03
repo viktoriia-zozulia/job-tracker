@@ -69,9 +69,11 @@ function FieldError({
 function ApplicationFields({
   initialValues,
   errors,
+  isEdit,
 }: {
   initialValues?: ApplicationFormValues;
   errors?: ApplicationFormState["errors"];
+  isEdit: boolean;
 }) {
   const today = useLocalToday();
   const [values, setValues] = useState(initialValues ?? EMPTY_VALUES);
@@ -87,10 +89,14 @@ function ApplicationFields({
   }
 
   function changeStatus(status: ApplicationStatus) {
-    if (status === "saved") {
-      setChosenDate("");
-    } else if (values.status === "saved") {
-      setChosenDate(null);
+    // Only a new application follows the status like this. On edit, the server
+    // applies the date rule so an existing date is never lost.
+    if (!isEdit) {
+      if (status === "saved") {
+        setChosenDate("");
+      } else if (values.status === "saved") {
+        setChosenDate(null);
+      }
     }
     setField("status", status);
   }
@@ -203,16 +209,26 @@ function ApplicationFields({
   );
 }
 
-export function ApplicationForm() {
+type EditProps = {
+  action: (
+    state: ApplicationFormState,
+    formData: FormData,
+  ) => Promise<ApplicationFormState>;
+  initialValues: ApplicationFormValues;
+};
+
+/** Pass `edit` to update an existing application. Without it, the form creates a new one. */
+export function ApplicationForm({ edit }: { edit?: EditProps }) {
   // Next.js keeps visited routes alive, so without this key, Cancel followed by
   // "Add application" would show the old draft. The browser's Back button still restores it.
   const { bfcacheId } = useRouter();
-  return <ApplicationFormContent key={bfcacheId} />;
+  return <ApplicationFormContent key={bfcacheId} edit={edit} />;
 }
 
-function ApplicationFormContent() {
+function ApplicationFormContent({ edit }: { edit?: EditProps }) {
+  const today = useLocalToday();
   const [state, formAction, pending] = useActionState(
-    createApplication,
+    edit?.action ?? createApplication,
     initialState,
   );
 
@@ -240,9 +256,12 @@ function ApplicationFormContent() {
       {/* A new key after each save gives "Save and add another" an empty form. */}
       <ApplicationFields
         key={state.savedCount}
-        initialValues={state.values}
+        initialValues={state.values ?? edit?.initialValues}
         errors={state.errors}
+        isEdit={Boolean(edit)}
       />
+
+      {edit && <input type="hidden" name="today" value={today} />}
 
       {state.formError && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
@@ -260,15 +279,17 @@ function ApplicationFormContent() {
         >
           {pending ? "Saving…" : "Save"}
         </button>
-        <button
-          type="submit"
-          name="intent"
-          value="another"
-          disabled={pending}
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-60 dark:border-zinc-700"
-        >
-          Save and add another
-        </button>
+        {!edit && (
+          <button
+            type="submit"
+            name="intent"
+            value="another"
+            disabled={pending}
+            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-60 dark:border-zinc-700"
+          >
+            Save and add another
+          </button>
+        )}
         <Link href="/dashboard" className="text-sm font-medium underline">
           Cancel
         </Link>

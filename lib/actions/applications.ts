@@ -5,8 +5,18 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { requireUser } from "@/lib/auth";
-import { createApplication as insertApplication } from "@/lib/db/queries";
-import { applicationSchema, type ApplicationField } from "@/lib/validation";
+import {
+  createApplication as insertApplication,
+  getApplication,
+  updateApplication as saveApplication,
+} from "@/lib/db/queries";
+import { appliedDateAfterStatusChange, resolveToday } from "@/lib/dates";
+import {
+  applicationSchema,
+  isApplicationId,
+  type ApplicationField,
+  type ApplicationInput,
+} from "@/lib/validation";
 
 const FIELDS = [
   "company",
@@ -18,6 +28,8 @@ const FIELDS = [
   "appliedAt",
   "notes",
 ] as const satisfies readonly ApplicationField[];
+
+const NOT_FOUND_MESSAGE = "This application doesn't exist.";
 
 export type ApplicationFormValues = Record<ApplicationField, string>;
 
@@ -38,24 +50,39 @@ function readValues(formData: FormData) {
   return values;
 }
 
+type ParsedForm =
+  | { input: ApplicationInput; failure?: undefined }
+  | { failure: ApplicationFormState; input?: undefined };
+
+function parseForm(
+  state: ApplicationFormState,
+  values: ApplicationFormValues,
+): ParsedForm {
+  const parsed = applicationSchema.safeParse(values);
+
+  if (parsed.success) {
+    return { input: parsed.data };
+  }
+
+  const { fieldErrors } = z.flattenError(parsed.error);
+  const errors: ApplicationFormState["errors"] = {};
+  for (const field of FIELDS) {
+    errors[field] = fieldErrors[field]?.[0];
+  }
+  return { failure: { savedCount: state.savedCount, values, errors } };
+}
+
 export async function createApplication(
   state: ApplicationFormState,
   formData: FormData,
 ): Promise<ApplicationFormState> {
   const user = await requireUser();
   const values = readValues(formData);
-  const parsed = applicationSchema.safeParse(values);
+  const { input, failure } = parseForm(state, values);
 
-  if (!parsed.success) {
-    const { fieldErrors } = z.flattenError(parsed.error);
-    const errors: ApplicationFormState["errors"] = {};
-    for (const field of FIELDS) {
-      errors[field] = fieldErrors[field]?.[0];
-    }
-    return { savedCount: state.savedCount, values, errors };
+  if (failure) {
+    return failure;
   }
-
-  const input = parsed.data;
 
   try {
     await insertApplication(user.id, {
@@ -77,5 +104,55 @@ export async function createApplication(
     return { savedCount: state.savedCount + 1, savedCompany: input.company };
   }
 
+  redirect("/dashboard");
+}
+
+export async function updateApplication(
+  id: string,
+  state: ApplicationFormState,
+  formData: FormData,
+): Promise<ApplicationFormState> {
+  const user = await requireUser();
+  const values = readValues(formData);
+  const notFound = {
+    savedCount: state.savedCount,
+    values,
+    formError: NOT_FOUND_MESSAGE,
+  };
+
+  if (!isApplicationId(id)) {
+    return notFound;
+  }
+
+  const { input, failure } = parseForm(state, values);
+
+  if (failure) {
+    return failure;
+  }
+
+  try {
+    const existing = await getApplication(user.id, id);
+    if (!existing) {
+      return notFound;
+    }
+
+    const appliedAt = appliedDateAfterStatusChange(
+      { from: existing.status, to: input.status, appliedAt: input.appliedAt },
+      resolveToday(formData.get("today")),
+    );
+
+    if (!(await saveApplication(user.id, id, { ...input, appliedAt }))) {
+      return notFound;
+    }
+  } catch {
+    return {
+      savedCount: state.savedCount,
+      values,
+      formError: "Couldn't save this application. Please try again.",
+    };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/applications/${id}/edit`);
   redirect("/dashboard");
 }

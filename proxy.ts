@@ -1,8 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { isApplicationId } from "@/lib/validation";
+
 const AUTH_PAGES = ["/login", "/signup"];
 const PROTECTED_PREFIXES = ["/dashboard", "/applications"];
+const EDIT_PAGE = /^\/applications\/([^/]+)\/edit\/?$/;
 
 function matchesPrefix(pathname: string, prefix: string) {
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
@@ -54,6 +57,30 @@ export async function proxy(request: NextRequest) {
   }
 
   if (!redirectTo) {
+    const editId = pathname.match(EDIT_PAGE)?.[1];
+
+    // The page can't send a real 404 once it starts streaming, so check here first.
+    // RLS limits this lookup to the user's own rows. The page still checks too.
+    if (isLoggedIn && editId !== undefined) {
+      const exists = isApplicationId(editId)
+        ? await supabase
+            .from("applications")
+            .select("id")
+            .eq("id", editId)
+            .maybeSingle()
+        : { data: null, error: null };
+
+      if (!exists.error && !exists.data) {
+        const notFound = NextResponse.rewrite(
+          new URL("/application-not-found", request.url),
+        );
+        response.cookies
+          .getAll()
+          .forEach((cookie) => notFound.cookies.set(cookie));
+        return notFound;
+      }
+    }
+
     return response;
   }
 

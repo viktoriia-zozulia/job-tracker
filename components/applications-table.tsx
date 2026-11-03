@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { Application } from "@/lib/db/queries";
 import { normalizeUrl } from "@/lib/validation";
 
@@ -31,7 +33,7 @@ export function ApplicationsTable({
 }) {
   return (
     <div className="mt-6 overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
-      <table className="w-full min-w-[44rem] text-sm">
+      <table className="w-full min-w-[48rem] text-sm">
         <thead className="border-b border-zinc-200 text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
           <tr>
             <th scope="col" className={headerClass}>
@@ -51,6 +53,9 @@ export function ApplicationsTable({
             </th>
             <th scope="col" className={headerClass}>
               Salary
+            </th>
+            <th scope="col" className={headerClass}>
+              <span className="sr-only">Actions</span>
             </th>
           </tr>
         </thead>
@@ -82,6 +87,17 @@ export function ApplicationsTable({
                 </ul>
               </td>
               <td className={cellClass}>{application.salary}</td>
+              <td className={`${cellClass} whitespace-nowrap`}>
+                <Link
+                  href={`/applications/${application.id}/edit`}
+                  // Each request to this page runs a lookup in proxy.ts.
+                  prefetch={false}
+                  aria-label={`Edit ${application.company}`}
+                  className="underline"
+                >
+                  Edit
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
