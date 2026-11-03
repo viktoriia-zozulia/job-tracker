@@ -19,6 +19,8 @@ Derived from `docs/spec.md`. The spec says what to build; this file says how.
 - Route protection uses `proxy.ts` in the project root. `middleware` was renamed.
 - `cookies()`, `params` and `searchParams` are async.
 - `next lint` is gone, and `npm run lint` already calls ESLint directly.
+- `cacheComponents` is on in `next.config.ts`, so reading cookies outside a Suspense boundary is a build error. Every protected route has a `loading.tsx`, which provides that boundary.
+- User data never uses `use cache`, so every read is fresh and nothing private is cached.
 - Read the matching guide in `node_modules/next/dist/docs/` before each task, as `AGENTS.md` requires.
 
 ### Files beyond the `CLAUDE.md` structure

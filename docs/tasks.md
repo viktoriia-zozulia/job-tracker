@@ -37,7 +37,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 
 ## US-1: Account (branch: `us-1-account`)
 
-- [ ] **8. Add `requireUser()` and session handling in `proxy.ts`** (US-1)
+- [x] **8. Add `requireUser()` and session handling in `proxy.ts`** (US-1)
   - `proxy.ts` refreshes the session and handles the `/`, `/dashboard` and `/login` redirects. Add a placeholder `/dashboard` page that calls `requireUser()`.
   - Verify: logged out, `/` and `/dashboard` go to `/login`.
 - [ ] **9. Add sign-up, login and logout** (US-1)
