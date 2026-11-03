@@ -2,8 +2,12 @@ import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
 export async function createClient() {
+  // The Supabase client reads the clock as it loads the session, which Next.js
+  // only allows at request time.
+  await connection();
   const cookieStore = await cookies();
 
   return createServerClient(
