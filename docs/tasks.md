@@ -43,7 +43,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **9. Add sign-up, login and logout** (US-1)
   - Add the forms and Server Actions, with errors shown in the form.
   - Verify: sign-up lands on `/dashboard` with no confirmation step; login lands on `/dashboard`; a wrong password shows an error; logout returns to `/login`; a logged-in user opening `/login` or `/` goes to `/dashboard`.
-- [ ] **10. Deploy early to Vercel** (US-1, you for accounts and env vars)
+- [x] **10. Deploy early to Vercel** (US-1, you for accounts and env vars)
   - Link the project and set the env vars.
   - Verify: sign-up, login and logout work on the deployed URL.
 
