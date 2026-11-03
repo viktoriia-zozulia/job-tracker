@@ -94,7 +94,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **22. Add the "appears in the text" check** (US-5)
   - Link and salary must match exactly as written. Company, role and stack entries match after normalising case and whitespace. Failed values are dropped and listed as not found.
   - Verify: an invented link, a reworded salary and a salary with different spacing are dropped, and a company with different case is kept.
-- [ ] **23. Add `POST /api/parse-job`** (US-5, US-1)
+- [x] **23. Add `POST /api/parse-job`** (US-5, US-1)
   - Run the checks in the order in plan section 8, and reject a mismatched `Origin`. Log only error type and status, never the text.
   - Verify: no session returns 401; empty or over-20,000-character text returns 400 and isn't counted; at the limit it returns 429 and doesn't call Claude; a failed call still counts; server logs contain no job description text.
 - [ ] **24. Add the paste box to the add page** (US-5)
