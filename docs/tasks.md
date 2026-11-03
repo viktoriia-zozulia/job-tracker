@@ -91,7 +91,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [ ] **21. Add the Claude extraction module** (US-5)
   - Add `lib/ai/parse-job.ts` using `claude-haiku-5-5` from one constant, `client.messages.parse`, effort `low`, no retries and a timeout. Treat refusal and `max_tokens` stops as failures.
   - Verify: a throwaway script extracts from a real posting, and a posting with no link or salary returns them as null.
-- [ ] **22. Add the "appears in the text" check** (US-5)
+- [x] **22. Add the "appears in the text" check** (US-5)
   - Link and salary must match exactly as written. Company, role and stack entries match after normalising case and whitespace. Failed values are dropped and listed as not found.
   - Verify: an invented link, a reworded salary and a salary with different spacing are dropped, and a company with different case is kept.
 - [ ] **23. Add `POST /api/parse-job`** (US-5, US-1)
