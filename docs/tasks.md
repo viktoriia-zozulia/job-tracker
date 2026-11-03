@@ -25,7 +25,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 
 ## Schema (branch: `chore/schema`)
 
-- [ ] **5. Add the `applications` table** (US-2, US-3)
+- [x] **5. Add the `applications` table** (US-2, US-3)
   - Add the schema, status enum, index and defaults, then generate and apply the migration.
   - Verify: the table, enum, index and cascade show up in Supabase.
 - [ ] **6. Add the `ai_usage` table** (US-5)
