@@ -7,6 +7,7 @@ import { z } from "zod";
 import { requireUser } from "@/lib/auth";
 import {
   createApplication as insertApplication,
+  deleteApplication as removeApplication,
   getApplication,
   updateApplication as saveApplication,
   updateApplicationStatus,
@@ -187,5 +188,26 @@ export async function changeApplicationStatus(
 
   revalidatePath("/dashboard");
   revalidatePath(`/applications/${id}/edit`);
+  return {};
+}
+
+export async function deleteApplication(
+  id: string,
+): Promise<{ error?: string }> {
+  const user = await requireUser();
+
+  if (!isApplicationId(id)) {
+    return { error: NOT_FOUND_MESSAGE };
+  }
+
+  try {
+    if (!(await removeApplication(user.id, id))) {
+      return { error: NOT_FOUND_MESSAGE };
+    }
+  } catch {
+    return { error: "Couldn't delete this application. Please try again." };
+  }
+
+  revalidatePath("/dashboard");
   return {};
 }

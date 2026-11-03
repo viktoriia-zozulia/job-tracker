@@ -87,3 +87,12 @@ export async function updateApplicationStatus(
     .returning({ id: applications.id });
   return updated.length > 0;
 }
+
+/** Returns false if no application with this id belongs to this user. */
+export async function deleteApplication(userId: string, id: string) {
+  const deleted = await db
+    .delete(applications)
+    .where(and(eq(applications.id, id), eq(applications.userId, userId)))
+    .returning({ id: applications.id });
+  return deleted.length > 0;
+}

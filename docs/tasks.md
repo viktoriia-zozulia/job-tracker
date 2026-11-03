@@ -79,7 +79,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **18. Add the quick status change** (US-4, US-2)
   - Add a table control using `useOptimistic` and `useTransition`, with the same date rule and refresh on success.
   - Verify: no full page reload; blocking the request in dev tools rolls back with an error; another user's id changes nothing.
-- [ ] **19. Add delete with confirmation** (US-4, US-1)
+- [x] **19. Add delete with confirmation** (US-4, US-1)
   - Add an HTML `<dialog>` and an action filtered on `id` and `user_id`.
   - Verify: cancel keeps the row, confirm removes it permanently, and another user's id deletes nothing.
 

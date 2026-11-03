@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { DeleteApplicationButton } from "@/components/delete-application-button";
 import { StatusSelect } from "@/components/status-select";
 import type { Application } from "@/lib/db/queries";
 import { normalizeUrl } from "@/lib/validation";
@@ -102,6 +103,10 @@ export function ApplicationsTable({
                 >
                   Edit
                 </Link>
+                <DeleteApplicationButton
+                  id={application.id}
+                  company={application.company}
+                />
               </td>
             </tr>
           ))}
