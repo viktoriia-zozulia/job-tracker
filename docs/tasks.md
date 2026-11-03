@@ -19,7 +19,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **3. Add Supabase server and browser clients** (US-1)
   - Add `lib/supabase/`, following the current `@supabase/ssr` docs.
   - Verify: lint and type check pass.
-- [ ] **4. Add the Drizzle client and config** (all stories)
+- [x] **4. Add the Drizzle client and config** (all stories)
   - Add `lib/db/index.ts` and `drizzle.config.ts`, with `server-only` on the client.
   - Verify: a one-off query succeeds against the database, and importing the client from a client component fails the build.
 
