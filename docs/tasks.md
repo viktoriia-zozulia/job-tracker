@@ -10,7 +10,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 
 ## Setup (branch: `chore/setup`)
 
-- [ ] **1. Install dependencies and add an env template** (all stories)
+- [x] **1. Install dependencies and add an env template** (all stories)
   - Add the packages from plan section 1 and a `.env.example` with variable names only. Add `!.env.example` to `.gitignore` so the template can be committed.
   - Verify: `npm run build` passes, `.env.example` is tracked, and `.env.local` stays ignored.
 - [ ] **2. Create the Supabase project and local env** (all stories, you)
