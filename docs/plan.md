@@ -90,7 +90,8 @@ RLS needs its own migration, generated with `drizzle-kit generate --custom`.
 
 - The form sets today's date in the browser after mount, which avoids a server and client mismatch.
 - Selecting "saved" on a new application clears the date, and the server also stores null for new saved applications.
-- Moving an application to "applied", or out of "saved" to any other status, sets the date only if it's empty. The browser sends its local date, and the server validates it. This rule applies to both the quick status change and the edit form.
+- Moving an application to "applied", or from "saved" to "interview" or "offer", sets the date only if it's empty. The browser sends its local date, and the server validates it. This rule applies to both the quick status change and the edit form.
+- Moving from "saved" to "rejected" leaves an empty date empty. "Sent this week" only counts applications with a date, so these aren't counted.
 
 ## 6. Application form (US-2, US-4, US-5)
 

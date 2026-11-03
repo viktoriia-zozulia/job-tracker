@@ -35,7 +35,8 @@ As a user, I can add an application with: company, role, link, stack, salary, st
 - [ ] Validation happens on the server, not only in the form
 - [ ] New applications default to status "applied" and today's date, in my browser's timezone
 - [ ] A new application with status "saved" has an empty applied date
-- [ ] Moving an application to "applied" sets today's date if the date is empty
+- [ ] Moving an application to "applied", or from "saved" to "interview" or "offer", sets today's date if the date is empty
+- [ ] Moving an application from "saved" to "rejected" leaves an empty date empty
 - [ ] Whitespace-only company or role counts as empty
 - [ ] Limits: company and role 200 characters, salary 100, notes 5,000; applied date can't be in the future
 - [ ] A link with no scheme gets https://; only http and https are accepted; an empty link is stored as no link
@@ -83,6 +84,8 @@ As a user, I can paste a job description and get the form prefilled with company
 As a user, I can see how many applications I sent this week and how many are in each status.
 
 - [ ] "Sent this week" counts applications with an applied date in the current week and any status except "saved", including ones later rejected
+- [ ] An application moved from "saved" to "applied", "interview" or "offer" with an empty date counts from the day it moved, because it gets today's date
+- [ ] An application moved from "saved" to "rejected" with an empty date isn't counted
 - [ ] The week starts on Monday, in my browser's timezone
 - [ ] All five statuses show a count, including zero
 - [ ] Stats appear at the top of /dashboard and always cover all my applications, ignoring the filter and search
