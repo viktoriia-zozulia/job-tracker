@@ -13,10 +13,10 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 - [x] **1. Install dependencies and add an env template** (all stories)
   - Add the packages from plan section 1 and a `.env.example` with variable names only. Add `!.env.example` to `.gitignore` so the template can be committed.
   - Verify: `npm run build` passes, `.env.example` is tracked, and `.env.local` stays ignored.
-- [ ] **2. Create the Supabase project and local env** (all stories, you)
+- [x] **2. Create the Supabase project and local env** (all stories, you)
   - Create the project, turn off "Confirm email", and fill in `.env.local`.
   - Verify: the keys are in `.env.local`, and `git status` doesn't list it.
-- [ ] **3. Add Supabase server and browser clients** (US-1)
+- [x] **3. Add Supabase server and browser clients** (US-1)
   - Add `lib/supabase/`, following the current `@supabase/ssr` docs.
   - Verify: lint and type check pass.
 - [ ] **4. Add the Drizzle client and config** (all stories)
