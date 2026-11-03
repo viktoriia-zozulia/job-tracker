@@ -61,7 +61,7 @@ Before finishing every task, run `npm run lint` and `npx tsc --noEmit`. Read the
 
 ## US-3: See and filter applications (branch: `us-3-list`)
 
-- [ ] **14. Add the applications table** (US-3, US-1)
+- [x] **14. Add the applications table** (US-3, US-1)
   - Show the user's rows newest first, with `loading.tsx` and `error.tsx`. Show links only if they are http or https. The table scrolls sideways at phone width.
   - Verify: the order is correct, a second account sees none of the first account's rows, and the page works at 400px wide.
 - [ ] **15. Add the status filter** (US-3)
