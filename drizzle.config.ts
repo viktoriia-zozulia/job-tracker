@@ -8,6 +8,7 @@ export default defineConfig({
   schema: "./lib/db/schema.ts",
   out: "./drizzle",
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    // The driver doesn't encrypt unless told to.
+    url: `${process.env.DATABASE_URL!}?sslmode=require`,
   },
 });

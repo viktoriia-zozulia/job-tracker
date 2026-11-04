@@ -4,6 +4,8 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 const client = postgres(process.env.DATABASE_URL!, {
+  // The driver doesn't encrypt unless told to.
+  ssl: "require",
   // Supabase's transaction pooler doesn't support prepared statements.
   prepare: false,
   // Through this pooler, parallel queries hang when the driver pipelines them
