@@ -4,6 +4,7 @@ import { useOptimistic, useState, useTransition } from "react";
 
 import { changeApplicationStatus } from "@/lib/actions/applications";
 import { localDateString } from "@/lib/dates";
+import { SLOW_ACTION_MESSAGE, useSlowPending } from "@/lib/use-slow-pending";
 import { APPLICATION_STATUSES, type ApplicationStatus } from "@/lib/validation";
 
 export function StatusSelect({
@@ -16,7 +17,8 @@ export function StatusSelect({
   status: ApplicationStatus;
 }) {
   const [optimisticStatus, setOptimisticStatus] = useOptimistic(status);
-  const [, startTransition] = useTransition();
+  const [pending, startTransition] = useTransition();
+  const slow = useSlowPending(pending);
   const [error, setError] = useState<string | null>(null);
 
   function handleChange(next: ApplicationStatus) {
@@ -55,9 +57,9 @@ export function StatusSelect({
           </option>
         ))}
       </select>
-      {error && (
+      {(error || slow) && (
         <p role="alert" className="mt-1 text-xs text-red-600 dark:text-red-400">
-          {error}
+          {slow ? SLOW_ACTION_MESSAGE : error}
         </p>
       )}
     </>

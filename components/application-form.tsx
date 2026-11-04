@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { unstable_rethrow, useRouter } from "next/navigation";
 import {
   startTransition,
   useActionState,
@@ -21,6 +21,7 @@ import {
 } from "@/lib/ai/verify-extraction";
 import { JobDescriptionPaste } from "@/components/job-description-paste";
 import { localDateString } from "@/lib/dates";
+import { SLOW_ACTION_MESSAGE, useSlowPending } from "@/lib/use-slow-pending";
 import {
   APPLICATION_STATUSES,
   parseStack,
@@ -248,10 +249,29 @@ export function ApplicationForm({ edit }: { edit?: EditProps }) {
 
 function ApplicationFormContent({ edit }: { edit?: EditProps }) {
   const today = useLocalToday();
-  const [state, formAction, pending] = useActionState(
-    edit?.action ?? createApplication,
-    initialState,
-  );
+  const saveAction = edit?.action ?? createApplication;
+
+  // Any failure shows next to the buttons and keeps what was typed. Without this,
+  // a failed request replaces the whole page with the error page.
+  async function submit(
+    previous: ApplicationFormState,
+    formData: FormData,
+  ): Promise<ApplicationFormState> {
+    try {
+      return await saveAction(previous, formData);
+    } catch (error) {
+      // The redirect after a successful save arrives as a thrown error.
+      unstable_rethrow(error);
+      return {
+        savedCount: previous.savedCount,
+        formError:
+          "Couldn't save this application. Please try again. If it keeps failing, reload the page.",
+      };
+    }
+  }
+
+  const [state, formAction, pending] = useActionState(submit, initialState);
+  const slow = useSlowPending(pending);
 
   // React resets a form after its action runs, which puts the status select back
   // on its first option. Submitting this way skips that reset.
@@ -287,6 +307,12 @@ function ApplicationFormContent({ edit }: { edit?: EditProps }) {
       {state.formError && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           {state.formError}
+        </p>
+      )}
+
+      {slow && (
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+          {SLOW_ACTION_MESSAGE}
         </p>
       )}
 

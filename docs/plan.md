@@ -24,6 +24,9 @@ Derived from `docs/spec.md`. The spec says what to build; this file says how.
 - With `cacheComponents` on, Next.js keeps up to 3 visited routes alive but hidden, including their state and form values. Logout therefore does a full page load, so no user data stays in the page. Forms and dialogs need checking for stale state when a user returns to them.
 - React resets a form after its action runs, which puts a `<select>` back on its first option. Forms with a select submit through `onSubmit` and `startTransition` to skip that reset.
 - Forms are tested in a real browser with JavaScript on. Plain HTTP requests can't see what the user sees.
+- Database calls have a 10-second limit, so a stuck database gives an error instead of an endless wait.
+- A rejected Server Action replaces the page with the error page, so forms catch it and show the error themselves.
+- React holds back updates while a Server Action is pending, and a retry would queue behind it. A plain timer shows a "reload the page" message if an action never returns.
 - Read the matching guide in `node_modules/next/dist/docs/` before each task, as `AGENTS.md` requires.
 
 ### Files beyond the `CLAUDE.md` structure

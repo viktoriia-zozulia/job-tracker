@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 
 import { deleteApplication } from "@/lib/actions/applications";
+import { SLOW_ACTION_MESSAGE, useSlowPending } from "@/lib/use-slow-pending";
 
 export function DeleteApplicationButton({
   id,
@@ -13,6 +14,7 @@ export function DeleteApplicationButton({
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [pending, startTransition] = useTransition();
+  const slow = useSlowPending(pending);
   const [error, setError] = useState<string | null>(null);
 
   function open() {
@@ -57,12 +59,12 @@ export function DeleteApplicationButton({
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
           This permanently removes the application. You can&apos;t undo this.
         </p>
-        {error && (
+        {(error || slow) && (
           <p
             role="alert"
             className="mt-2 text-sm text-red-600 dark:text-red-400"
           >
-            {error}
+            {slow ? SLOW_ACTION_MESSAGE : error}
           </p>
         )}
         <div className="mt-4 flex justify-end gap-3">
