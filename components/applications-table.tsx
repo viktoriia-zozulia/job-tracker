@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { DeleteApplicationButton } from "@/components/delete-application-button";
+import { LinkPending } from "@/components/link-pending";
 import { StatusSelect } from "@/components/status-select";
 import type { Application } from "@/lib/db/queries";
 import { normalizeUrl } from "@/lib/validation";
@@ -102,6 +103,7 @@ export function ApplicationsTable({
                   className="underline"
                 >
                   Edit
+                  <LinkPending />
                 </Link>
                 <DeleteApplicationButton
                   id={application.id}

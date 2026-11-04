@@ -19,7 +19,8 @@ Derived from `docs/spec.md`. The spec says what to build; this file says how.
 - Route protection uses `proxy.ts` in the project root. `middleware` was renamed.
 - `cookies()`, `params` and `searchParams` are async.
 - `next lint` is gone, and `npm run lint` already calls ESLint directly.
-- `cacheComponents` is on in `next.config.ts`, so reading cookies outside a Suspense boundary is a build error. Every protected route has a `loading.tsx`, which provides that boundary.
+- `cacheComponents` is on in `next.config.ts`, so reading cookies outside a Suspense boundary is a build error. One boundary in the root layout provides it and shows "Loading…" on a full page load.
+- Don't add a `loading.tsx` to a route. React shows a Suspense fallback for at least 300ms, so even a 28ms response took 312ms to appear. Links show a thin pending bar instead.
 - User data never uses `use cache`, so every read is fresh and nothing private is cached.
 - With `cacheComponents` on, Next.js keeps up to 3 visited routes alive but hidden, including their state and form values. Logout therefore does a full page load, so no user data stays in the page. Forms and dialogs need checking for stale state when a user returns to them.
 - React resets a form after its action runs, which puts a `<select>` back on its first option. Forms with a select submit through `onSubmit` and `startTransition` to skip that reset.
@@ -53,7 +54,7 @@ Derived from `docs/spec.md`. The spec says what to build; this file says how.
 | `/applications/[id]/edit` | Form | Returns a 404 if the id is invalid, missing or not owned |
 | `POST /api/parse-job` | Route handler | AI parsing |
 
-`loading.tsx`, `error.tsx` and `not-found.tsx` cover the dashboard and application routes.
+`error.tsx` and `not-found.tsx` cover the dashboard and application routes. Loading is handled by the root layout and a pending bar on links.
 
 ## 3. Data
 

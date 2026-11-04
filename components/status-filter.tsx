@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LinkPending } from "@/components/link-pending";
 import { APPLICATION_STATUSES, type ApplicationStatus } from "@/lib/validation";
 
 const OPTIONS = [undefined, ...APPLICATION_STATUSES];
@@ -22,6 +23,7 @@ export function StatusFilter({ active }: { active?: ApplicationStatus }) {
                 }`}
               >
                 {status ?? "All"}
+                <LinkPending />
               </Link>
             </li>
           );

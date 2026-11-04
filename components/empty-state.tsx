@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { LinkPending } from "@/components/link-pending";
+
 const boxClass =
   "mt-6 rounded-md border border-dashed border-zinc-300 px-4 py-10 text-center dark:border-zinc-700";
 
@@ -15,6 +17,7 @@ export function NoApplications() {
         className="mt-4 inline-block text-sm font-medium underline"
       >
         Add an application
+        <LinkPending />
       </Link>
     </div>
   );
@@ -32,6 +35,7 @@ export function NoMatches() {
         className="mt-4 inline-block text-sm font-medium underline"
       >
         Show all applications
+        <LinkPending />
       </Link>
     </div>
   );

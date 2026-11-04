@@ -20,6 +20,7 @@ import {
   type ExtractedField,
 } from "@/lib/ai/verify-extraction";
 import { JobDescriptionPaste } from "@/components/job-description-paste";
+import { LinkPending } from "@/components/link-pending";
 import { localDateString } from "@/lib/dates";
 import { SLOW_ACTION_MESSAGE, useSlowPending } from "@/lib/use-slow-pending";
 import {
@@ -339,6 +340,7 @@ function ApplicationFormContent({ edit }: { edit?: EditProps }) {
         )}
         <Link href="/dashboard" className="text-sm font-medium underline">
           Cancel
+          <LinkPending />
         </Link>
       </div>
     </form>

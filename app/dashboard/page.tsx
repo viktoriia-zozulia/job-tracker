@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ApplicationsTable } from "@/components/applications-table";
 import { NoApplications, NoMatches } from "@/components/empty-state";
+import { LinkPending } from "@/components/link-pending";
 import { LogoutButton } from "@/components/logout-button";
 import { StatusFilter } from "@/components/status-filter";
 import { requireUser } from "@/lib/auth";
@@ -30,6 +31,7 @@ export default async function DashboardPage({
             className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background"
           >
             Add application
+            <LinkPending />
           </Link>
           <LogoutButton />
         </div>

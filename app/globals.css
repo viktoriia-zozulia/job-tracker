@@ -24,3 +24,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Waits a moment, so fast page switches don't flash the bar. */
+.link-pending {
+  opacity: 0;
+  animation: link-pending-in 150ms 120ms forwards;
+}
+
+@keyframes link-pending-in {
+  to {
+    opacity: 1;
+  }
+}

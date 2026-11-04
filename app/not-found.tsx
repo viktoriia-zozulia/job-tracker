@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { LinkPending } from "@/components/link-pending";
+
 export default function NotFound() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
@@ -12,6 +14,7 @@ export default function NotFound() {
         className="mt-4 inline-block text-sm font-medium underline"
       >
         Back to dashboard
+        <LinkPending />
       </Link>
     </main>
   );
