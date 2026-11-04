@@ -78,7 +78,7 @@ RLS needs its own migration, generated with `drizzle-kit generate --custom`.
 ## 4. Auth and ownership (US-1)
 
 - **`proxy.ts`:** refreshes the session cookie and does the redirects. This is only a first filter, as the Next.js docs warn it shouldn't be the sole protection.
-- **`requireUser()`:** called at the start of every protected page, Server Action and route handler, because Server Actions can be reached by direct POST. The user id comes only from here, never from client input. Check the current `@supabase/ssr` docs for the right verified-session call before implementing.
+- **`requireUser()`:** called at the start of every protected page that shows user data, and every Server Action and route handler, because Server Actions can be reached by direct POST. The user id comes only from here, never from client input. The add page is static, shows no user data, and relies on `proxy.ts` and its save action. Check the current `@supabase/ssr` docs for the right verified-session call before implementing.
 - **Ownership:** update and delete filter on `id` and `user_id` together, and zero affected rows returns not found.
 - **Same 404 everywhere:** ids are checked as UUIDs with Zod first. A malformed id, a missing id and another user's id then all give the same 404, rather than a database error.
 - **Real 404 status:** a page that has started streaming is stuck on status 200, so `proxy.ts` looks up the edit page's id first, using the user's session so RLS applies. The page still checks ownership with Drizzle. Edit links don't prefetch, so the dashboard doesn't run one lookup per row.
